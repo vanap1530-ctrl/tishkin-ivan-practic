@@ -1,0 +1,89 @@
+package task3;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class Car implements Comparable<Car> {
+    private String vin;
+    private String model;
+    private String manufacturer;
+    private int year;
+    private double mileage;
+    private double price;
+
+    public Car(String vin, String model, String manufacturer, int year, double mileage, double price) {
+        this.vin = vin;
+        this.model = model;
+        this.manufacturer = manufacturer;
+        this.year = year;
+        this.mileage = mileage;
+        this.price = price;
+    }
+
+    // Геттеры и сеттеры
+    public String getVin() { return vin; }
+    public String getModel() { return model; }
+    public String getManufacturer() { return manufacturer; }
+    public int getYear() { return year; }
+    public double getMileage() { return mileage; }
+    public double getPrice() { return price; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(vin, car.vin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vin);
+    }
+
+    @Override
+    public int compareTo(Car other) {
+        // Сортировка по году выпуска (от новых к старым)
+        return Integer.compare(other.year, this.year);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Car{vin='%s', model='%s', year=%d, mileage=%.0f, price=%.2f}",
+                vin, model, year, mileage, price);
+    }
+
+    public static void main(String[] args) {
+        // Создаем несколько машин, включая дубликаты по VIN
+        Car car1 = new Car("VIN001", "Camry", "Toyota", 2022, 15000, 35000);
+        Car car2 = new Car("VIN002", "X5", "BMW", 2023, 5000, 65000);
+        Car car3 = new Car("VIN001", "Corolla", "Toyota", 2020, 30000, 25000); // Дубликат по VIN
+        Car car4 = new Car("VIN003", "Model S", "Tesla", 2024, 2000, 85000);
+        Car car5 = new Car("VIN004", "Accord", "Honda", 2021, 25000, 30000);
+        Car car6 = new Car("VIN002", "X3", "BMW", 2019, 45000, 40000); // Дубликат по VIN
+
+        // Добавляем в HashSet и проверяем, что дубликаты не добавляются
+        Set<Car> carSet = new HashSet<>();
+        carSet.add(car1);
+        carSet.add(car2);
+        carSet.add(car3);
+        carSet.add(car4);
+        carSet.add(car5);
+        carSet.add(car6);
+
+        System.out.println("HashSet машин (дубликаты по VIN не добавлены):");
+        for (Car car : carSet) {
+            System.out.println(car);
+        }
+        System.out.println("Количество уникальных машин: " + carSet.size());
+
+        // Сортировка с помощью Comparable
+        Set<Car> sortedCars = new TreeSet<>(carSet);
+        System.out.println("\nМашины, отсортированные по году выпуска (от новых к старым):");
+        for (Car car : sortedCars) {
+            System.out.println(car);
+        }
+    }
+}
