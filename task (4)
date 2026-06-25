@@ -1,0 +1,81 @@
+package task4;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CarAnalysis {
+    static class Car {
+        private String vin;
+        private String model;
+        private String manufacturer;
+        private int year;
+        private double mileage;
+        private double price;
+
+        public Car(String vin, String model, String manufacturer, int year, double mileage, double price) {
+            this.vin = vin;
+            this.model = model;
+            this.manufacturer = manufacturer;
+            this.year = year;
+            this.mileage = mileage;
+            this.price = price;
+        }
+
+        public String getManufacturer() { return manufacturer; }
+        public double getMileage() { return mileage; }
+        public double getPrice() { return price; }
+        public int getYear() { return year; }
+
+        @Override
+        public String toString() {
+            return String.format("Car{model='%s', manufacturer='%s', year=%d, mileage=%.0f, price=%.2f}",
+                    model, manufacturer, year, mileage, price);
+        }
+    }
+
+    public static void main(String[] args) {
+        // Создаем список машин
+        List<Car> cars = Arrays.asList(
+                new Car("VIN001", "Camry", "Toyota", 2022, 15000, 35000),
+                new Car("VIN002", "X5", "BMW", 2023, 5000, 65000),
+                new Car("VIN003", "Model S", "Tesla", 2024, 2000, 85000),
+                new Car("VIN004", "Accord", "Honda", 2021, 25000, 30000),
+                new Car("VIN005", "Civic", "Honda", 2020, 60000, 22000),
+                new Car("VIN006", "A6", "Audi", 2022, 35000, 50000),
+                new Car("VIN007", "X3", "BMW", 2021, 45000, 42000),
+                new Car("VIN008", "Corolla", "Toyota", 2023, 10000, 28000),
+                new Car("VIN009", "Model 3", "Tesla", 2023, 8000, 55000),
+                new Car("VIN010", "E-Class", "Mercedes", 2022, 30000, 60000)
+        );
+
+        // 1. Отфильтровываем машины с пробегом меньше 50,000 км
+        System.out.println("Машины с пробегом меньше 50,000 км:");
+        cars.stream()
+                .filter(car -> car.getMileage() < 50000)
+                .forEach(System.out::println);
+
+        // 2. Сортируем по цене по убыванию и выводим топ-3
+        System.out.println("\nТоп-3 самые дорогие машины:");
+        cars.stream()
+                .sorted((c1, c2) -> Double.compare(c2.getPrice(), c1.getPrice()))
+                .limit(3)
+                .forEach(System.out::println);
+
+        // 3. Считаем средний пробег всех машин
+        double averageMileage = cars.stream()
+                .mapToDouble(Car::getMileage)
+                .average()
+                .orElse(0);
+        System.out.printf("\nСредний пробег всех машин: %.2f км%n", averageMileage);
+
+        // 4. Группируем машины по производителю
+        Map<String, List<Car>> carsByManufacturer = cars.stream()
+                .collect(Collectors.groupingBy(Car::getManufacturer));
+
+        System.out.println("\nМашины, сгруппированные по производителю:");
+        carsByManufacturer.forEach((manufacturer, carList) -> {
+            System.out.println("\n" + manufacturer + ":");
+            carList.forEach(car -> System.out.println("  " + car));
+        });
+    }
+}
