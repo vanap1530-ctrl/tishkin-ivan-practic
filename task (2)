@@ -1,0 +1,48 @@
+package task2;
+
+import java.util.*;
+
+public class CarModels {
+    public static void main(String[] args) {
+        // Создаем список с названиями моделей машин (с дубликатами)
+        List<String> carModels = new ArrayList<>();
+        carModels.add("Toyota Camry");
+        carModels.add("BMW X5");
+        carModels.add("Tesla Model S");
+        carModels.add("Honda Accord");
+        carModels.add("Toyota Camry");
+        carModels.add("Mercedes E-Class");
+        carModels.add("Tesla Model 3");
+        carModels.add("BMW X5");
+        carModels.add("Audi A6");
+        carModels.add("Toyota Camry");
+
+        System.out.println("Исходный список моделей:");
+        System.out.println(carModels);
+
+        // Удаляем дубликаты и сортируем в обратном алфавитном порядке
+        Set<String> uniqueModels = new HashSet<>(carModels);
+        List<String> sortedList = new ArrayList<>(uniqueModels);
+        sortedList.sort(Comparator.reverseOrder());
+
+        System.out.println("\nМодели после удаления дубликатов и сортировки в обратном порядке:");
+        System.out.println(sortedList);
+
+        // Сохраняем в Set
+        Set<String> modelSet = new HashSet<>(sortedList);
+        System.out.println("\nSet моделей: " + modelSet);
+
+        // Реализуем проверку: если модель содержит "Tesla", заменяем на "ELECTRO_CAR"
+        Set<String> updatedSet = new HashSet<>();
+        for (String model : modelSet) {
+            if (model.contains("Tesla")) {
+                updatedSet.add("ELECTRO_CAR");
+            } else {
+                updatedSet.add(model);
+            }
+        }
+
+        System.out.println("\nSet после замены Tesla на ELECTRO_CAR:");
+        System.out.println(updatedSet);
+    }
+}
